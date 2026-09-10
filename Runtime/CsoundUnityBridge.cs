@@ -434,12 +434,16 @@ public class CsoundUnityBridge
 
     public string GetStringChannel(string name)
     {
+#if !UNITY_WEBGL || UNITY_EDITOR
         var bufferSize = 32768; // we need a better way to retrieve the length of the string
         IntPtr channelStr = Marshal.AllocHGlobal(bufferSize);
         Csound6.NativeMethods.csoundGetStringChannel(csound, name, channelStr);
         var stringChannel = GetMessageText(channelStr);
         Marshal.FreeHGlobal(channelStr);
         return stringChannel;
+#else
+        return string.Empty;
+#endif
     }
 
     /// <summary>
