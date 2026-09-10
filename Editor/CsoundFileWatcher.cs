@@ -233,6 +233,8 @@ public class CsoundFileWatcher
         return 0;
 #elif UNITY_EDITOR_OSX
         return 0;
+#else
+        return 0;
 #endif
     }
 
