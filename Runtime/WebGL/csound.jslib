@@ -123,7 +123,7 @@ var csoundModule = {
         var uniqueId = CsoundRef.uniqueIdCounter;
         CsoundRef.uniqueIdCounter++;
         console.log(`[CsoundUnity] created Csound with uniqueId: ${uniqueId}, CsoundRef.instances : ${JSON.stringify(CsoundRef.instances)} CsoundRef.uniqueIdCounter: ${CsoundRef.uniqueIdCounter}`);
-        Module['dynCall_vi'](callback, uniqueId);
+        {{{ makeDynCall('vi', 'callback') }}}(uniqueId);
         //cs.terminateInstance && (await cs.terminateInstance());
     },
     
@@ -136,7 +136,7 @@ var csoundModule = {
             var strBufferSize = lengthBytesUTF8(channel) + 1;
             var strBuffer = _malloc(strBufferSize);
             stringToUTF8(channel, strBuffer, strBufferSize);
-            Module['dynCall_viif'](callback, uniqueId, [strBuffer], value);
+            {{{ makeDynCall('viif', 'callback') }}}(uniqueId, strBuffer, value);
         } catch (error) {
             console.error(`[CsoundUnity] [id: ${+uniqueId}] Error retrieving\ channel ${channel}, error: ${error}`);
         }
@@ -150,7 +150,7 @@ var csoundModule = {
 
         //await CsoundRef.instances[uniqueId].stop();
         await CsoundRef.instances[uniqueId].cleanup();
-        Module['dynCall_vi'](callback, uniqueId);
+        {{{ makeDynCall('vi', 'callback') }}}(uniqueId);
     },
 
     csoundReset: async function(uniqueId) {
@@ -162,7 +162,7 @@ var csoundModule = {
         console.log("table len: "+ table.length + ": " + table + "\nBYTES_PER_ELEMENT: " + table.BYTES_PER_ELEMENT)
         var buf = _malloc(table.length * table.BYTES_PER_ELEMENT);
         Module.HEAPF64.set(table, buf >> 3);
-        Module['dynCall_viii'](callback, uniqueId, table.length, buf);
+        {{{ makeDynCall('viii', 'callback') }}}(uniqueId, table.length, buf);
     },
 
     csoundSetOption: async function(uniqueId, option, callback) {
@@ -170,7 +170,7 @@ var csoundModule = {
         console.log("csoundSetOption for id: " + uniqueId + " option: " + opt)
         var res = await CsoundRef.instances[uniqueId].setOption(opt);
         console.log("csoundSetOption res: " + res + " option: " + opt);
-        Module['dynCall_vii'](callback, uniqueId, res);
+        {{{ makeDynCall('vii', 'callback') }}}(uniqueId, res);
         //return res;
     },
     
